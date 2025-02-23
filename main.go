@@ -20,7 +20,7 @@ type BodyType struct {
 
 func generateKey(url string) string {
 	hash := sha256.Sum256([]byte(url))
-	return hex.EncodeToString(hash[:])
+	return hex.EncodeToString(hash[:])[:6]
 }
 
 func reset() {
