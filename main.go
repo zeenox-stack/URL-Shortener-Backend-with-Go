@@ -67,7 +67,7 @@ func shorten(res http.ResponseWriter, req *http.Request) {
 	key := generateKey(body.Url)
 
 	urls[key] = body.Url
-	response := map[string]string{"shortened_url": "shortenit.up.railway.app/" + key}
+	response := map[string]string{"shortened_url": "https://shortenit.up.railway.app/" + key}
 
 	if err := json.NewEncoder(res).Encode(response); err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
