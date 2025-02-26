@@ -6,7 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"sync"
+	"sync" 
+	"github.com/rs/cors"
 )
 
 var (
@@ -76,11 +77,15 @@ func shorten(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", redirect)
-	http.HandleFunc("/shorten", shorten)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/shorten", shorten)
+	mux.HandleFunc("/", redirect)
+
+	handle := cors.Default().Handler(mux)
 
 	fmt.Printf("Server is running at http://localhost:8000\n")
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	if err := http.ListenAndServe(":8000", handle); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
 }
