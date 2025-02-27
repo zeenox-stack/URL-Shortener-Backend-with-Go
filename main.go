@@ -6,7 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"sync" 
+	"sync"
+
 	"github.com/rs/cors"
 )
 
@@ -82,7 +83,14 @@ func main() {
 	mux.HandleFunc("/shorten", shorten)
 	mux.HandleFunc("/", redirect)
 
-	handle := cors.Default().Handler(mux)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"}, 
+		AllowedMethods: []string{"GET", "POST"}, 
+		AllowedHeaders: []string{"Content-Type"}, 
+		AllowCredentials: true,
+	}); 
+
+	handle := c.Handler(mux);
 
 	fmt.Printf("Server is running at http://localhost:8000\n")
 	if err := http.ListenAndServe(":8000", handle); err != nil {
